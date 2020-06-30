@@ -37,14 +37,17 @@ function createScrapCard(title, message) {
                 <button class="btn btn-danger mr-1">Deletar</button>
                 <button
                   class="btn btn-info"
-                  data-toggle="modal"
-                  data-target="#editModal"
+                  onclick = "openEditModal()"
                 >
                   Editar
                 </button>
               </div>
             </div>
   `;
+}
+
+function openEditModal() {
+  $("#editModal").modal("toggle");
 }
 
 addButton.onclick = addNewScrap;
