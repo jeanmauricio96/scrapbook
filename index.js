@@ -1,7 +1,10 @@
 let titleInput = document.getElementById("messageTitle");
+let editTitleInput = document.getElementById("editMessageTitle");
 let messageInput = document.getElementById("messageBody");
+let editMessageInput = document.getElementById("editMessageBody");
 let addButton = document.getElementById("addButton");
 let scrapsField = document.getElementById("scrapsField");
+let btnSaveEdit = document.getElementById("saveEdit");
 
 let scraps = [];
 
@@ -20,12 +23,17 @@ function addNewScrap() {
     scraps.push({ title, message });
 
     for (const scrap of scraps) {
-      scrapsField.innerHTML += createScrapCard(scrap.title, scrap.message);
+      let position = scraps.indexOf(scrap);
+      scrapsField.innerHTML += createScrapCard(
+        scrap.title,
+        scrap.message,
+        position
+      );
     }
   }
 }
 
-function createScrapCard(title, message) {
+function createScrapCard(title, message, position) {
   return `  <div class="message-cards card text-white bg-dark m-2">
               <div class="card-header font-weight-bold">${title}</div>
               <div class="card-body">
@@ -37,7 +45,7 @@ function createScrapCard(title, message) {
                 <button class="btn btn-danger mr-1">Deletar</button>
                 <button
                   class="btn btn-info"
-                  onclick = "openEditModal()"
+                  onclick = "openEditModal(${position})"
                 >
                   Editar
                 </button>
@@ -46,8 +54,15 @@ function createScrapCard(title, message) {
   `;
 }
 
-function openEditModal() {
+function openEditModal(position) {
   $("#editModal").modal("toggle");
+
+  editTitleInput.value = scraps[position].title;
+  editMessageInput.value = scraps[position].message;
+
+  btnSaveEdit.setAttribute("onclick", `saveRedaction(${position})`);
 }
+
+function saveRedaction(position) {}
 
 addButton.onclick = addNewScrap;
