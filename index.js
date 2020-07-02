@@ -8,29 +8,33 @@ let btnSaveEdit = document.getElementById("saveEdit");
 
 let scraps = [];
 
+function renderScraps() {
+  scrapsField.innerHTML = "";
+
+  for (const scrap of scraps) {
+    let position = scraps.indexOf(scrap);
+    scrapsField.innerHTML += createScrapCard(
+      scrap.title,
+      scrap.message,
+      position
+    );
+  }
+}
+
 function addNewScrap() {
   let title = titleInput.value;
   let message = messageInput.value;
 
-  if (title == "" || message == "") {
-    return alert("Erro: Preenchimento dos é campos obrigatório!");
-  } else {
-    titleInput.value = "";
-    messageInput.value = "";
-
-    scrapsField.innerHTML = "";
-
-    scraps.push({ title, message });
-
-    for (const scrap of scraps) {
-      let position = scraps.indexOf(scrap);
-      scrapsField.innerHTML += createScrapCard(
-        scrap.title,
-        scrap.message,
-        position
-      );
-    }
+  if (!messageTitle.value || !messageBody.value) {
+    return alert("Todos os campos devem ser preenchidos!");
   }
+
+  titleInput.value = "";
+  messageInput.value = "";
+
+  scraps.push({ title, message });
+
+  renderScraps();
 }
 
 function createScrapCard(title, message, position) {
@@ -42,7 +46,9 @@ function createScrapCard(title, message, position) {
                 </p>
               </div>
               <div class="w100 d-flex justify-content-end pr-2 pb-2">
-                <button class="btn btn-danger mr-1">Deletar</button>
+                <button class="btn btn-danger mr-1" 
+                onclick = "deleteTask()"
+                >Deletar</button>
                 <button
                   class="btn btn-info"
                   onclick = "openEditModal(${position})"
@@ -63,6 +69,17 @@ function openEditModal(position) {
   btnSaveEdit.setAttribute("onclick", `saveRedaction(${position})`);
 }
 
-function saveRedaction(position) {}
+function saveRedaction(position) {
+  scraps[position].title = editTitleInput.value;
+  scraps[position].message = editMessageInput.value;
+
+  renderScraps();
+}
+
+function deleteTask(position) {
+  scraps.splice(position, 1);
+
+  renderScraps();
+}
 
 addButton.onclick = addNewScrap;
